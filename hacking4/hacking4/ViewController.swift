@@ -63,6 +63,7 @@ class ViewController: UIViewController {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         // Called after using addObserver
         if keyPath == "estimatedProgress" {
+            progressView.isHidden = false
             progressView.progress = Float(webView.estimatedProgress)
         }
     }
@@ -71,5 +72,6 @@ class ViewController: UIViewController {
 extension ViewController : WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         title = webView.url?.host
+        progressView.isHidden = true
     }
 }
