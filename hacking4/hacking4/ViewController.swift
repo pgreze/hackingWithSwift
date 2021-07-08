@@ -14,6 +14,11 @@ class ViewController: UIViewController {
         view.navigationDelegate = self
         return view
     }()
+    lazy var progressView: UIProgressView = {
+        let view = UIProgressView(progressViewStyle: .default)
+        view.sizeToFit()
+        return view
+    }()
 
     override func loadView() {
         view = webView
@@ -24,8 +29,17 @@ class ViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
-        openUrl("pgreze.dev")
+        // Allows to have the refresh button on the right.
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
+        let progressButton = UIBarButtonItem(customView: progressView)
+        toolbarItems = [progressButton, spacer, refresh]
+        navigationController?.isToolbarHidden = false
+        
         webView.allowsBackForwardNavigationGestures = true
+        // Listen for webView.estimatedProgress updates
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        openUrl("pgreze.dev")
     }
     
     @objc private func openTapped() {
@@ -44,6 +58,13 @@ class ViewController: UIViewController {
     
     private func openUrl(_ url: String) {
         webView.load(URLRequest(url: URL(string: "https://\(url)")!))
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        // Called after using addObserver
+        if keyPath == "estimatedProgress" {
+            progressView.progress = Float(webView.estimatedProgress)
+        }
     }
 }
 
