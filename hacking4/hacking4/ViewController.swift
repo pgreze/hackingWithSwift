@@ -21,12 +21,34 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let url = URL(string: "https://pgreze.dev")!
-        webView.load(URLRequest(url: url))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
+        
+        openUrl("pgreze.dev")
         webView.allowsBackForwardNavigationGestures = true
+    }
+    
+    @objc private func openTapped() {
+        let ac = UIAlertController(title: "Open page", message: nil, preferredStyle: .actionSheet)
+        ac.addAction(UIAlertAction(title: "pgreze.dev", style: .default, handler: openPage))
+        ac.addAction(UIAlertAction(title: "mercari.com", style: .default, handler: openPage))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(ac, animated: true)
+    }
+    
+    private func openPage(_ action: UIAlertAction) {
+        guard let title = action.title else { return }
+        openUrl(title)
+    }
+    
+    private func openUrl(_ url: String) {
+        webView.load(URLRequest(url: URL(string: "https://\(url)")!))
     }
 }
 
 extension ViewController : WKNavigationDelegate {
-    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        title = webView.url?.host
+    }
 }
