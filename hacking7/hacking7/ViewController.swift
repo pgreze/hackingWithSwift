@@ -14,7 +14,13 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
+        let urlString: String = { () -> String in
+            if navigationController?.tabBarItem.tag == 0 {
+                return "https://www.hackingwithswift.com/samples/petitions-1.json"
+            } else {
+                return "https://www.hackingwithswift.com/samples/petitions-2.json"
+            }
+        }()
 
         if let url = URL(string: urlString) {
             if let data = try? Data(contentsOf: url) {
