@@ -22,26 +22,39 @@ class ViewController: UIViewController {
         label.text = value.0
         label.sizeToFit()
         return ("label\(index+1)", label)
-    }.reduce(into: [:]) { $0[$1.0] = $1.1 }
+    }//.reduce(into: [:]) { $0[$1.0] = $1.1 }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        labels.forEach { view.addSubview($0.value) }
+        labels.forEach { (_, label) in view.addSubview(label) }
         
-        for label in labels.keys {
-            // H: = horizontal, | = the edge of the view (=VC)
-            // == each of our labels should stretch edge-to-edge in our view
-            // Exp: H:|[label1]|
-            addConstraints(withVisualFormat: "H:|[\(label)]|")
+//        for label in labels.keys {
+//            // H: = horizontal, | = the edge of the view (=VC)
+//            // == each of our labels should stretch edge-to-edge in our view
+//            // Exp: H:|[label1]|
+//            addConstraints(withVisualFormat: "H:|[\(label)]|")
+//        }
+//
+//        let metrics = ["labelHeight": 88]
+//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label1(88@999)]-[label2(label1)]-[label3(label1)]-[label4(label1)]-[label5(label1)]->=10-|", options: [], metrics: metrics, views: labels))
+        
+        var previous: UILabel?
+        labels.forEach { (_, label) in
+            label.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            label.heightAnchor.constraint(equalToConstant: 88).isActive = true
+
+            if let previous = previous {
+                label.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
+            } else {
+                label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+            }
+            previous = label
         }
-        
-        let metrics = ["labelHeight": 88]
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label1(88@999)]-[label2(label1)]-[label3(label1)]-[label4(label1)]-[label5(label1)]->=10-|", options: [], metrics: metrics, views: labels))
     }
     
-    private func addConstraints(withVisualFormat: String) {
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: withVisualFormat, options: [], metrics: nil, views: labels))
-    }
+    //private func addConstraints(withVisualFormat: String) {
+    //    view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: withVisualFormat, options: [], metrics: nil, views: labels))
+    //}
 }
 
