@@ -34,18 +34,21 @@ class ViewController: UIViewController {
         container.translatesAutoresizingMaskIntoConstraints = false
         return container
     }()
-    lazy var verticalConstraints = [ // Notice: safeAreaLayoutGuide from iOS11 https://stackoverflow.com/a/47236131/5489877
-        countryContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50.0),
-        countryContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50.0),
-        countryContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50.0),
-        countryContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50.0),
-    ]
-    lazy var horizontalConstraints = [ // Notice: safeAreaLayoutGuide from iOS11 https://stackoverflow.com/a/47236131/5489877
-        countryContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        countryContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-        countryContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        countryContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-    ]
+    // Notice: safeAreaLayoutGuide from iOS11 https://stackoverflow.com/a/47236131/5489877
+    lazy var countryContainerConstraints: (vertical: [NSLayoutConstraint], horizontal: [NSLayoutConstraint]) = (
+        vertical: [
+            countryContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50.0),
+            countryContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50.0),
+            countryContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50.0),
+            countryContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50.0),
+        ],
+        horizontal: [
+            countryContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            countryContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            countryContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            countryContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        ]
+    )
     
     var countries: [String] = [
         "estonia",
@@ -99,15 +102,15 @@ class ViewController: UIViewController {
             titleView.spacing = 20.0
             
             countryContainer.axis = .horizontal
-            NSLayoutConstraint.deactivate(verticalConstraints)
-            NSLayoutConstraint.activate(horizontalConstraints)
+            NSLayoutConstraint.deactivate(countryContainerConstraints.vertical)
+            NSLayoutConstraint.activate(countryContainerConstraints.horizontal)
         } else {
             titleView.axis = .vertical
             titleView.spacing = 0.0 // UIStackView.spacingUseDefault
             
             countryContainer.axis = .vertical
-            NSLayoutConstraint.deactivate(horizontalConstraints)
-            NSLayoutConstraint.activate(verticalConstraints)
+            NSLayoutConstraint.deactivate(countryContainerConstraints.horizontal)
+            NSLayoutConstraint.activate(countryContainerConstraints.vertical)
         }
     }
     
