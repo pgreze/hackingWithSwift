@@ -15,19 +15,19 @@ class ViewController: UIViewController {
         ("SOME", UIColor.yellow),
         ("AWESOME", UIColor.green),
         ("LABELS", UIColor.orange),
-    ].enumerated().map { (index, value) -> (String, UILabel) in
+    ].enumerated().map { (index, value) -> UILabel in //(String, UILabel) in
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = value.1
         label.text = value.0
         label.sizeToFit()
-        return ("label\(index+1)", label)
+        return label//("label\(index+1)", label)
     }//.reduce(into: [:]) { $0[$1.0] = $1.1 }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        labels.forEach { (_, label) in view.addSubview(label) }
+        labels.forEach { view.addSubview($0) }
         
 //        for label in labels.keys {
 //            // H: = horizontal, | = the edge of the view (=VC)
@@ -40,9 +40,15 @@ class ViewController: UIViewController {
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label1(88@999)]-[label2(label1)]-[label3(label1)]-[label4(label1)]-[label5(label1)]->=10-|", options: [], metrics: metrics, views: labels))
         
         var previous: UILabel?
-        labels.forEach { (_, label) in
-            label.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-            label.heightAnchor.constraint(equalToConstant: 88).isActive = true
+        labels.forEach { label in
+            label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+            label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+            // https://stackoverflow.com/a/62598230
+            let height = label.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 1 / CGFloat(labels.count))
+            // So no collide between top/bottom and height constraints,
+            // but
+            height.priority = UILayoutPriority.defaultLow
+            height.isActive = true
 
             if let previous = previous {
                 label.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
@@ -51,6 +57,7 @@ class ViewController: UIViewController {
             }
             previous = label
         }
+        previous?.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     //private func addConstraints(withVisualFormat: String) {
