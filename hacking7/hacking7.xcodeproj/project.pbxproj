@@ -13,6 +13,8 @@
 		10E004CF269824A1000E3773 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10E004CD269824A1000E3773 /* Main.storyboard */; };
 		10E004D1269824A2000E3773 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10E004D0269824A2000E3773 /* Assets.xcassets */; };
 		10E004D4269824A2000E3773 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10E004D2269824A2000E3773 /* LaunchScreen.storyboard */; };
+		10E004E0269826F1000E3773 /* Petition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E004DF269826F1000E3773 /* Petition.swift */; };
+		10E004E426982703000E3773 /* Petitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10E004E326982703000E3773 /* Petitions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		10E004D0269824A2000E3773 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		10E004D3269824A2000E3773 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		10E004D5269824A2000E3773 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		10E004DF269826F1000E3773 /* Petition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Petition.swift; sourceTree = "<group>"; };
+		10E004E326982703000E3773 /* Petitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Petitions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				10E004D0269824A2000E3773 /* Assets.xcassets */,
 				10E004D2269824A2000E3773 /* LaunchScreen.storyboard */,
 				10E004D5269824A2000E3773 /* Info.plist */,
+				10E004DF269826F1000E3773 /* Petition.swift */,
+				10E004E326982703000E3773 /* Petitions.swift */,
 			);
 			path = hacking7;
 			sourceTree = "<group>";
@@ -137,9 +143,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10E004E0269826F1000E3773 /* Petition.swift in Sources */,
 				10E004CC269824A1000E3773 /* ViewController.swift in Sources */,
 				10E004C8269824A1000E3773 /* AppDelegate.swift in Sources */,
 				10E004CA269824A1000E3773 /* SceneDelegate.swift in Sources */,
+				10E004E426982703000E3773 /* Petitions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
