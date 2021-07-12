@@ -10,32 +10,38 @@ import UIKit
 class ViewController: UITableViewController {
     
     var petitions = [Petition]()
-
+    var petitionId: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let urlString = "https://www.hackingwithswift.com/samples/petitions-\((navigationController?.tabBarItem.tag ?? 0) + 1).json"
-
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    self?.parse(json: data)
-                }
+        // Avoid to use UI stuff in a background thread.
+        petitionId = (navigationController?.tabBarItem.tag ?? 0) + 1
+        // == DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        performSelector(inBackground: #selector(fetchJson), with: nil)
+    }
+    
+    @objc func fetchJson() {
+        let urlString = "https://www.hackingwithswift.com/samples/petitions-\(petitionId).json"
+        
+        if let url = URL(string: urlString) {
+            if let data = try? Data(contentsOf: url) {
+                parse(json: data)
             }
         }
     }
     
     func parse(json: Data) {
         let decoder = JSONDecoder()
-
+        
         if let jsonPetitions = try? decoder.decode(Petitions.self, from: json) {
             petitions = jsonPetitions.results
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+            // == performSelector(onMainThread: #selector(...), with: nil, waitUntilDone: false)
+            // == tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+            DispatchQueue.main.async { self.tableView.reloadData() }
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return petitions.count
     }
