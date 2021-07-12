@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Person: NSObject, NSCoding {
+class Person: NSObject, Codable { //, NSCoding {
     var name: String
     var image: String
     
@@ -16,13 +16,13 @@ class Person: NSObject, NSCoding {
         self.image = image
     }
     
-    func encode(with coder: NSCoder) {
-        coder.encode(name, forKey: "name")
-        coder.encode(image, forKey: "image")
-    }
-    
-    required init?(coder: NSCoder) {
-        name = coder.decodeObject(forKey: "name") as? String ?? ""
-        image = coder.decodeObject(forKey: "image") as? String ?? ""
-    }
+//    func encode(with coder: NSCoder) {
+//        coder.encode(name, forKey: "name")
+//        coder.encode(image, forKey: "image")
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        name = coder.decodeObject(forKey: "name") as? String ?? ""
+//        image = coder.decodeObject(forKey: "image") as? String ?? ""
+//    }
 }

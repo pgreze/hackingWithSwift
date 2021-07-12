@@ -16,6 +16,10 @@ class ViewController: UICollectionViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
         
+        load()
+    }
+    
+    func oldLoad() {
         let defaults = UserDefaults.standard
         if let savedPeople = defaults.object(forKey: "people") as? Data {
             if let decodedPeople = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedPeople) as? [Person] {
@@ -24,10 +28,32 @@ class ViewController: UICollectionViewController {
         }
     }
     
-    func save() {
+    func oldSave() {
         if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: people, requiringSecureCoding: false) {
             let defaults = UserDefaults.standard
             defaults.set(savedData, forKey: "people")
+        }
+    }
+    
+    func load() {
+        let defaults = UserDefaults.standard
+        if let savedPeople = defaults.object(forKey: "people") as? Data {
+            let jsonDecoder = JSONDecoder()
+            do {
+                people = try jsonDecoder.decode([Person].self, from: savedPeople)
+            } catch {
+                print("Failed to load people")
+            }
+        }
+    }
+    
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData: Data = try? jsonEncoder.encode(people) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "people")
+        } else {
+            print("Failed to save people.")
         }
     }
     
