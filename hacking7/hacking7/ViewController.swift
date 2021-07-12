@@ -14,17 +14,13 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let urlString: String = { () -> String in
-            if navigationController?.tabBarItem.tag == 0 {
-                return "https://www.hackingwithswift.com/samples/petitions-1.json"
-            } else {
-                return "https://www.hackingwithswift.com/samples/petitions-2.json"
-            }
-        }()
+        let urlString = "https://www.hackingwithswift.com/samples/petitions-\((navigationController?.tabBarItem.tag ?? 0) + 1).json"
 
-        if let url = URL(string: urlString) {
-            if let data = try? Data(contentsOf: url) {
-                parse(json: data)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parse(json: data)
+                }
             }
         }
     }
@@ -34,7 +30,9 @@ class ViewController: UITableViewController {
 
         if let jsonPetitions = try? decoder.decode(Petitions.self, from: json) {
             petitions = jsonPetitions.results
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 
